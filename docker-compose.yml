@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: campaign_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: campaigndb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: campaign_python
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
